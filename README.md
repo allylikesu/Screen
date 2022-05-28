@@ -8,3 +8,5 @@ Build instructions:
 	> `./gradlew build`
 
 built .jar files are generated in screen/build/libs/
+
+## Find documentaion (javadoc) at screen/build/docs/javadocs/index.html
