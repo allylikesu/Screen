@@ -5,190 +5,300 @@ import java.util.ArrayList;
 
 /**
  * A Client for a Screen object. Meant to be extended and customized.
+ * @author allison
+ * @version 0.1.0
  */
 public class Client {
-  /*
-  int x: Stores x-value of Client on the Screen.
-  int y: Stores y-value of Client on the Screen.
-  Coodinates are relative to the top-left corner; A y-value of 0 puts the Client at the very top of the Screen.
-  Coordinates are (0,0) by default.
-  Set by void setCoordinates(int x, int y).
-  Get them using int getX() and int getY().
-  */
-  private int x, y;
 
-  /*
-  int length: Stores total length of the Client, in characters.
-  int height: Stores total height of the Client, in characters.
-  The smallest a Client can be is 1x1, representing one character on a Screen.
-  Set by the constructor and void setGeom(int l, int h).
-  Get them using int getLength() and int getHeight().
-  */
-  private int length, height;
+	/* ################## */
+	/* INSTANCE VARIABLES */
+	/* ################## */
 
-  /*
-  int minLength, int minHeight: unused so far, may deprecate
-  */
-  public int minLength;
-  public int minHeight;
+	/**
+	 * X-Coordinate of this Client's top-left corner.
+	 * Gotten with {@link #getX()}
+	 * Set with  {@link #setCoordinates(int, int)}
+	 * @since 0.1.0
+	 */
+  	private int x;
 
-  /*
-  char background: Character that void clear() sets the client contents to.
-  Set by void setBackground(String c) and void setBackground(char c).
-  Get it using String getBackgroundStr() and char getBackgroundChar().
-  */
-  private char background;
+	/**
+	 * Y-Coordinate of this Client's top-left corner.
+	 * Gotten with {@link #getY()}
+	 * Set with {@link #setCoordinates(int, int)}
+	 * @since 0.1.0
+	 */
+	private int y;
 
-  /*
-  ArrayList<ArrayList<String>> contents: 2-D ArrayList of single-character Strings representing the characters of the Client.
-  Initialized by the constructor
-  Set by void clear(), void setContents(String c), and void setContents(ArrayList<ArrayList<String>> c).
-  Get it using ArrayList<ArrayList<String>> getContents().
-  */
-  private ArrayList<ArrayList<String>> contents;
+	/**
+	 * Total length of this Client, in characters. Minimum value of 1.
+	 * Gotten with {@link #getLength()}
+	 * Set by the constructor or {@link #setGeom(int, int)}
+	 * @since 0.1.0
+	 */
+  	private int length;
 
-  /*
-  Screen context: The Screen object that this Client is attatched to.
-  set by void attatch().
-  */
-  public Screen context;
+	/**
+	 * Total height of this Client, in characters. Minimum value of 1.
+	 * Gotten with {@link #getHeight()}
+	 * Set by the constructor or {@link #setGeom(int, int)}
+	 * @since 0.1.0
+	 */
+  	private int height;
 
-  /*
-  Client(int l, int h): Constructor takes and sets length and height, and sets the background character. setBackground() must be called before setGeom(), as setGeom() calls clear().
-  */
-  public Client(int l, int h) {
-    // setContents(new ArrayList<ArrayList<String>>());
-    setBackground('X');
-    setGeom(l, h);
-    // length = l;
-    // height = h;
-    // contents = new ArrayList<ArrayList<String>>();
-    // background = 'X';
-    // clear();
-  }
+	/**
+	 * This Client's background character, used in {@link #clear()}.
+	 * Gotten with {@link #getBackgroundChar()} or {@link #getBackgroundStr()}
+	 * Set by {@link #setBackground(String)} or {@link #setBackground(char)}
+	 * @since 0.1.0
+	 */
+  	private char background;
 
-  /*
-  void clear(): Re-initializes contents, fills it with the background character appropriately.
-  */
-  public void clear() {
-    char[] arr = {background};
-    String bg = new String(arr);
-    contents = new ArrayList<ArrayList<String>>();
-    for(int r = 0; r < height; r++) {
-      contents.add(new ArrayList<String>());
-      for(int c = 0; c < length; c++) {
-        contents.get(r).add(bg);
-      }
-    }
-  }
+	/**
+	 * 2-D ArrayList of single-character Strings representing this Client's contents. 
+  	 * Initialized by the constructor
+	 * Gotten with {@link #getContents()}
+	 * Set by {@link #clear()}, {@link #setContents(String)}, {@link #setLine(int, String)}, and {@link #setLine(ArrayList<ArrayList<String>>)}
+	 * @since 0.1.0
+	 */
+  	private ArrayList<ArrayList<String>> contents;
+
+	/**
+	 * Screen that this Client is currently attatched to.
+	 * Gotten with {@link #getContext()}
+	 * Set by {@link #attatch(Screen)}
+	 * @since 0.1.0
+	 */
+  	private Screen context;
+
+	/* ############ */
+	/* CONSTRUCTORS */
+	/* ############ */
+
+	/**
+	 * Creates a new Client of geometry (l, h). Sets the background character to 'X', calls {@link #clear()}
+	 * @param l Client length
+	 * @param h Client height
+	 * @since 0.1.0
+	 */
+  	public Client(int l, int h) {
+    		setBackground('X');
+    		setGeom(l, h);
+  	}
+
+	/* ########################## */
+	/* CONTENT MANAGEMENT METHODS */
+	/* ########################## */
+
+	/**
+	 * Fills the Client's contents with the background character.
+	 * @since 0.1.0
+	 */
+  	public void clear() {
+    		char[] arr = {background};
+    		String bg = new String(arr);
+    		contents = new ArrayList<ArrayList<String>>();
+    		for(int r = 0; r < height; r++) {
+      			contents.add(new ArrayList<String>());
+      			for(int c = 0; c < length; c++) {
+        			contents.get(r).add(bg);
+      			}
+    		}
+  	}
+
+	/**
+	 * Sets this Client's contents to the single-character Strings in the 2-D ArrayList parameter.
+	 * May break if the geometry of the parameter is different than the Screen geometry.
+	 * @param c A 2-D ArrayList of single-character Strings.
+	 * @since 0.1.0
+	 */
+  	public void setContents(ArrayList<ArrayList<String>> c) {
+    		contents = c;
+  	}
+
+	/** 
+	 * Overrides individual characters in contents to the characters of the String. Newline characters separate lines. If a line of the String is too short for the Client dimensions, the extra characters in contents will not be overridden. If a line of the String is too long for the Client dimensions, the extra characters will be cut off.
+	 * @param s String to override contents with
+	 * @since 0.1.0
+	 */
+  	public void setContents(String s) {
+    		String[] arr = s.split("\n");
+    		for(int i = 0; i < arr.length; i++) {
+      			setLine(i, arr[i]);
+    		}
+  	}
+
+	/**
+	 * Overrides a single line with the characters in a String. Similar propreties to {@link #setContents(String)}
+	 * @param line Line number to override
+	 * @param con String to override the line with
+	 * @since 0.1.0
+	 */
+  	public void setLine(int line, String con) {
+    		for(int c = 0; c < length && c < con.length(); c++) {
+      			contents.get(line).set(c, con.substring(c, c+1));
+    		}
+  	}
+ 
+  	/* ########################## */
+  	/* SCREEN INTERACTION METHODS */
+  	/* ########################## */
+
+	/**
+	 * 'Attatches' a Client to a Screen. 
+	 * @param s Screen to attatch this Client to
+	 * @since 0.1.0
+	 */
+  	public void attatch(Screen s) {
+    		context = s;
+    		context.addClient(this);
+  	}
+
+	/**
+	 * Actions to preform when this Client is attatched to a Screen; Use this when extending the Client class.
+	 * @since 0.1.0
+	 */
+  	public void init() {
+    		return;
+  	}
+
+	/**
+	 * Actions to preform before this Client is removed from a Screen; Use this when extending the Client class.
+	 * If this method returns true, the Client will be removed. If it returns false, the Client will remain.
+	 * @return A boolean signaling whether this Client should be removed from the Screen (true) or not (false).
+	 * @since 0.1.0
+	 */
+  	public boolean destroy() {
+    		context = null;
+    		return true;
+  	}
   
-  /* ########################## */
-  /* SCREEN INTERACTION METHODS */
-  /* ########################## */
-  /*
-  void attatch(Screen s): Used to attatch a Client to a Screen. Sets the Screen taken as a parameter to the context variable, and then calls Screen.addClient(Client) to add this Client to the Screen.
-  */
-  public void attatch(Screen s) {
-    context = s;
-    context.addClient(this);
-  }
+  	/* ####### */
+  	/* SETTERS */
+  	/* ####### */
 
-  /*
-  void init(): Called by Screen.addClient(Client). Empty in the base Client class. 
-  When making custom Clients (extending the Client class), this method can be overridden to contain custom code to set up the Client in a custom way when it is attatched to a Screen.
-  */
-  public void init() {
-    return;
-  }
+	/**
+	 * Sets Client geometry. Clears the Client to apply changes.
+	 * @param l New length
+	 * @param h New height
+	 * @since 0.1.0
+	 */
+  	public void setGeom(int l, int h) {
+    		length = l;
+    		height = h;
+    		clear();
+  	}
 
-  /*
-  boolean destroy(): Called by Screen.removeClient(Client) before removing the Client from the Screen. If a value of true is returned, the process of removing the Client will finish. If a value of false is returned, the Client will not be removed. Simply returns true in the base Client class.
-  When making custom Clients (extending the Client class), this method can be overridden to contain custom code to execute when removing a Client. For example, this method could create an "are you sure you want to quit without saving?" window, and execute the appropriate code based on whether "save", "discard", or "cancel" are chosen.
-  */
-  public boolean destroy() {
-    return true;
-  }
-  
-  /* ####### */
-  /* SETTERS */
-  /* ####### */
-  /*
-  void setContents(ArrayList<ArrayList<String>> c): Sets contents to the 2-D ArrayList of Strings taken by the parameter.
-  void setContents(String s): Overrides individual characters in contents to the characters of the String. Newline characters separate lines. If a line of the String is too short for the Client dimensions, the extra characters in contents will not be overridden. If a line of the String is too long for the Client dimensions, the extra characters will be cut off.
-  void setLine(int line, String con): overrides the single line of index 'line' with the characters in 'con'. Used by setContents(String s).
-  */
-  public void setContents(ArrayList<ArrayList<String>> c) {
-    contents = c;
-  }
-  public void setContents(String s) {
-    String[] arr = s.split("\n");
-    for(int i = 0; i < arr.length; i++) {
-      setLine(i, arr[i]);
-    }
-  }
-  public void setLine(int line, String con) {
-    for(int c = 0; c < length && c < con.length(); c++) {
-      contents.get(line).set(c, con.substring(c, c+1));
-    }
-  }
+	/**
+	 * Sets the coordinates of this Client. This Client does not have to be attatched to a Screen to call this method, but a Screen usually is useful as it is the only thing that currently uses these values.
+	 * @param xc New X-Coordinate of the top-left corner of the Client.
+	 * @param yc New Y-Coordinate of the top-left corner of the Client.
+	 * @since 0.1.0
+	 */
+  	public void setCoordinates(int xc, int yc) {
+    		x = xc;
+    		y = yc;
+  	}
 
-  /*
-  void setGeom(int l, int h): Sets the length and height variables, and calls clear().
-  */
-  public void setGeom(int l, int h) {
-    length = l;
-    height = h;
-    clear();
-  }
+	/**
+	 * Sets the background character
+	 * @param c The new background character
+	 * @since 0.1.0
+	 */
+  	public void setBackground(char c) {
+    		background = c;
+  	}
 
-  /*
-  void setCoordinates(int sx, int yx): Sets the x and y variables.
-  */
-  public void setCoordinates(int xc, int yc) {
-    x = xc;
-    y = yc;
-  }
+	/**
+	 * Sets the background character to the 1st character in a String.
+	 * @param c String containing the new background character.
+	 * @since 0.1.0
+	 */
+  	public void setBackground(String c) {
+      		background = c.charAt(0);
+  	}
 
-  /*
-  void setBackground(char c): Sets the background character.
-  void setBackground(String c): Sets the background character to the 1st character (0th index) of c.
-  */
-  public void setBackground(char c) {
-    background = c;
-  }
-  public void setBackground(String c) {
-      background = c.charAt(0);
-  }
+  	/* ####### */
+  	/* GETTERS */
+  	/* ####### */
 
-  /* ####### */
-  /* GETTERS */
-  /* ####### */
-  public int getX() { return x; }
-  public int getY() { return y; }
+	/**
+	 * Get the X-Coordinate of the top-left corner of this Client.
+	 * @return The X-Coordinate of the top-left corner of this Client.
+	 * @since 0.1.0
+	 */
+  	public int getX() { return x; }
 
-  public int getLength() { return length; }
-  public int getHeight() { return height; }
+	/**
+	 * Get the Y-Coordinate of the top-left corner of this Client.
+	 * @return The Y-Coordinate of the top-left corner of this Client.
+	 * @since 0.1.0
+	 */
+  	public int getY() { return y; }
 
-  public char getBackgroundChar() { return background; }
-  public String getBackgroundStr() {
-    char[] c = {background};
-    return new String(c);
-  }
+	/**
+	 * Get the total length of this Client.
+	 * @return The total length of this Client.
+	 * @since 0.1.0
+	 */
+  	public int getLength() { return length; }
 
-  public ArrayList<ArrayList<String>> getContents() { return contents; }
+	/**
+	 * Get the total height of this Client.
+	 * @return The total height of this Client.
+	 * @since 0.1.0
+	 */
+  	public int getHeight() { return height; }
 
-  /* #### */
-  /* MISC */
-  /* #### */
-  public String toString() {
-    String ret = "";
-    for(int r = 0; r < contents.size(); r++) {
-      ArrayList<String> row = contents.get(r);
-      for(int c = 0; c < row.size(); c++) {
-        ret += row.get(c);
-      }
-      ret += "\n";
-    }
-    return ret;
-  }
+	/**
+	 * Get the background character in char form.
+	 * @return The background character in char form
+	 * @since 0.1.0
+	 */
+  	public char getBackgroundChar() { return background; }
+
+	/**
+	 * Get the background character in String form.
+	 * @return The background character in String form
+	 * @since 0.1.0
+	 */
+  	public String getBackgroundStr() {
+    		char[] c = {background};
+    		return new String(c);
+  	}
+
+	/**
+	 * Get the contents of this Client in the form of a 2-D ArrayList of single-character Strings. Changes made to this WILL reflect on the actual Client (i think).
+	 * @return The contents of this Client in the form of a 2-D ArrayList of single-character Strings
+	 * @since 0.1.0
+	 */
+  	public ArrayList<ArrayList<String>> getContents() { return contents; }
+
+	/**
+	 * Get the Screen that this Client is currently attatched to.
+	 * @return The Screen that this Client is currently attatched to
+	 * @since 0.1.0
+	 */
+  	public Screen getContext() { return context; }
+
+  	/* #### */
+  	/* MISC */
+  	/* #### */
+	
+	/**
+	 * Returns the contents of this Client in the form of a String
+	 * @return The contents of this Client in the form of a String
+	 * @since 0.1.0
+	 */
+  	public String toString() {
+    		String ret = "";
+    		for(int r = 0; r < contents.size(); r++) {
+      			ArrayList<String> row = contents.get(r);
+      			for(int c = 0; c < row.size(); c++) {
+        			ret += row.get(c);
+      			}
+      			ret += "\n";
+    		}
+    		return ret;
+  	}
 }

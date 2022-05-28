@@ -9,11 +9,11 @@ public class Bar extends Client {
 	}
 	public void init() {
 		setCoordinates(0,0);
-		setGeom(context.getLength(), 2);
+		setGeom(getContext().getLength(), 2);
 		setContents(infoStr());
 	}
 	public String infoStr() {
-		ArrayList<Client> clients = context.getClients();
+		ArrayList<Client> clients = getContext().getClients();
 		return "Clients: " + clients.size() + " | " + clients.get(clients.size() - 1).getClass().getSimpleName();
 	}
 }

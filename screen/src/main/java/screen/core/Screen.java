@@ -10,6 +10,11 @@ import java.util.ArrayList;
  * @version 0.1.0
  */
 public class Screen {
+
+	/* ############# */
+	/* INSTANCE VARS */
+	/* ############# */
+
 	/**
 	 * Stores total (including border) width of this screen, in characters.
 	 * Gotten with {@link #getLength()}
@@ -45,6 +50,10 @@ public class Screen {
 	 * @since 0.1.0
 	 */
 	private String[][] contents;
+
+	/* ############ */
+	/* CONSTRUCTORS */
+	/* ############ */
 
 	/**
 	 * Creates a new Screen. Calls {@link screen.clients.Client#init()}.
@@ -125,7 +134,7 @@ public class Screen {
   	}
 
 	/**
-	 * Resets all screen characters to the background character.
+	 * Resets all screen characters to the background character, with borders.
 	 * @since 0.1.0
 	 */
   	public void clear() {
@@ -144,6 +153,7 @@ public class Screen {
 
 	/**
 	 * Adds a Client to this Screen. Calls {@link screen.clients.Client#init()}. 
+	 * NOTE: this method is to be used by Clients only. To add a Client to a screen, use {@link screen.clients.Client#attatch(Screen)}.
 	 * @param c The Client to add to this Screen
 	 * @since 0.1.0
 	 */
